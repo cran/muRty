@@ -1,0 +1,9 @@
+5598c144177565ef30104684b2eea8ec *DESCRIPTION
+d5efb768ea9d9903fd5f85fd78437dbc *LICENSE
+e75aa9833bafbb557cc6ba58cc0d00ea *NAMESPACE
+92cbe359af8b597534a6321dbb806b94 *R/get_k_best.R
+764ebf3d6dfe922818f8577a0e676bb2 *R/insertInfStrike.R
+84f5fda37da56dcba793633ef66082ce *R/reconstructInitialPartition.R
+3dd01a3c9b442205b7e80205c51d87b7 *man/get_k_best.Rd
+2aedc9e39fe0ebd6a5bb9724d3f0b8e6 *tests/testthat.R
+b5befa6532bdd5edd43e4e9e851f6026 *tests/testthat/test_get_k_best.R
