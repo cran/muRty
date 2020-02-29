@@ -1,3 +1,14 @@
+muRty 0.3.1
+===========
+
+Very minor changes
+------------------
+
+-   Added additional unit tests;
+-   Added descriptions to all functions;
+-   Removed references to `lpsolve` from some of the files;
+-   Removed some of the unnecessary assignments & checks within functions.
+
 muRty 0.3.0
 ===========
 
@@ -12,8 +23,8 @@ General changes
     which is usually faster than the LP approach;
 
 -   Note that even though the `solve_LSAP` function from `clue` is used
-    for the Hungarian algorithm (which uses the `maximize` argument),
-    the `objective` argument has not changed.
+    for the Hungarian algorithm (which uses the `maximize` argument), the
+    `objective` argument has not changed.
 
 muRty 0.1.2
 ===========

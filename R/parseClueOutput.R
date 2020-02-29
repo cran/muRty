@@ -1,8 +1,17 @@
-#####################################################################################
+#########################################################################################
 #
-# Helper functions to parse the clue output and return a list with solution and cost
+# parseClueOutput - A helper function to parse the output from solve_LSAP (clue library)
 #
-#####################################################################################
+# It is used for initial solution as there are no restricted solutions yet.
+#
+# @mat: A matrix that can also contain negative values
+# @max: Whether we should minimize or maximize the cost
+# @addConst: Output from checks if any value is negative (TRUE or FALSE)
+# @addedConst: A constant to be added if any value is negative
+#
+# @return A list of solutions and costs
+#
+##########################################################################################
 
 parseClueOutput <- function(mat, max = NULL, addConst = checkNegative, addedConst = NULL) {
   
@@ -48,6 +57,22 @@ parseClueOutput <- function(mat, max = NULL, addConst = checkNegative, addedCons
   )
   
 }
+
+##############################################################################################
+#
+# parseClueOutputInf - A helper function to parse the output from solve_LSAP (clue library)
+#
+# It is applied during the partitioning when solutions are restricted.
+#
+# @mat: A matrix that can also contain negative values
+# @max: Whether we should minimize or maximize the cost
+# @const: A constant to be added. Corresponds to proxy Inf value and neutralizes the matrix
+# @addConst: Output from checks if any value is negative (TRUE or FALSE)
+# @addedConst: A constant (usually the minimum of matrix) to be added if any value is negative
+#
+# @return A list of solutions and costs
+#
+###############################################################################################
 
 parseClueOutputInf <- function(mat, max = NULL, const = proxyConst, addConst = checkNegative, addedConst = NULL) {
   

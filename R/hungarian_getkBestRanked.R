@@ -1,8 +1,18 @@
-############################################################################
+###############################################################################################################################################
 #
-# get_k_best variant for ranked algorithm based on the Hungarian method
+# Murty's algorithm for k-best assignments
 #
-############################################################################
+# This version is executed when ranking is needed and when Hungarian algorithm is used.
+#
+# @param matR Square matrix (N x N) in which values represent the weights.
+# @param k_bestR How many best scenarios should be returned. If by_rank = TRUE, this equals best ranks.
+# @param objectiveR Should the cost be minimized ('min') or maximized ('max')? Defaults to 'min'.
+# @param proxy_InfR What should be considered as a proxy for Inf? Defaults to 10e06; if objective = 'max' the sign is automatically reversed.
+# @param constantR Value to be added in order to avoid negative values in the matrix. Defaults to the minimum value of the matrix.
+#
+# @return A list with solutions and costs (objective values).
+#
+###############################################################################################################################################
 
 getkBestRankedHung <- function(matR, k_bestR = NULL, objectiveR = 'min', proxy_InfR = proxy_Inf, constantR = abs(min(matR))) {
   
@@ -26,7 +36,7 @@ getkBestRankedHung <- function(matR, k_bestR = NULL, objectiveR = 'min', proxy_I
     
   }
   
-  if (k_bestR < 1) { stop("You have provided an invalid value for k_bestR.") }
+  if (k_bestR < 1) { stop("You have provided an invalid value for k_best.") }
   
   # Stripping the dimension names - column names need to be V1, V2, V3 .. in order to reconstruct the full matrix
   
@@ -44,15 +54,7 @@ getkBestRankedHung <- function(matR, k_bestR = NULL, objectiveR = 'min', proxy_I
   
   # Match objective to relevant clue values
   
-  objectiveR <- if (objectiveR == 'min') { 
-    
-    objectiveR <- FALSE 
-    
-    } else { 
-    
-    objectiveR <- TRUE 
-    
-    }
+  objectiveR <- if (objectiveR == 'min') FALSE else TRUE 
   
   # Initializing the first solution and all the lists needed
   
@@ -100,7 +102,7 @@ getkBestRankedHung <- function(matR, k_bestR = NULL, objectiveR = 'min', proxy_I
   
   n_possible <- factorial(nrow(matR))
   
-  # First assignment with lpSolve and storage in all_solutions (solved matrix) and all_objectives (cost)
+  # First assignment with Hungarian (as implemented in clue) and storage in all_solutions (solved matrix) and all_objectives (cost)
   
   assignm <- parseClueOutput(matR, max = objectiveR, addConst = checkNegative, addedConst = constantR)
   
@@ -209,15 +211,7 @@ getkBestRankedHung <- function(matR, k_bestR = NULL, objectiveR = 'min', proxy_I
     
     # Check fullObjs for the (remaining) optimal (minimum/maximum) cost, the next iteration uses it as starting basis
     
-    if (objectiveR == FALSE) {
-      
-      idxOpt <- which.min(fullObjs)
-      
-    } else {
-      
-      idxOpt <- which.max(fullObjs)
-      
-    }
+    idxOpt <- if (objectiveR == FALSE) which.min(fullObjs) else which.max(fullObjs)
     
     # Store the corresponding full matrix & related information into variables needed for each iteration
     
@@ -283,21 +277,7 @@ getkBestRankedHung <- function(matR, k_bestR = NULL, objectiveR = 'min', proxy_I
       warning(
         paste0(
           "There are ", n_possible, " possible solutions. Final solution has been found at rank number ",
-          length(all_solutions), " which is lower than the k_bestR specified; terminating here."
-        )
-      )
-      
-      break
-      
-    } else if (
-      
-      ( (length(all_solutions) == n_possible) | (length(unlist(all_objectives)) == n_possible) ) & (k_bestR > n_possible) 
-      
-    ) {
-      
-      warning(
-        paste0(
-          "There are only ", n_possible, " possible solutions; terminating earlier, stopping at rank ", length(all_solutions), "."
+          length(all_solutions), " which is lower than the k_best specified; terminating here."
         )
       )
       
